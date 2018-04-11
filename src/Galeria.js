@@ -23,7 +23,6 @@ class Galeria extends Component {
 
     handleAdd = async images => {
         this.setState({ images: this.state.images.concat(await Promise.all([...images].map(this.preview))) });
-        // this.preview(img);
     };
 
     handleDrop = e => {
@@ -51,15 +50,40 @@ class Galeria extends Component {
     };
 
     printContainer = e => {
-        const container = document.body.querySelectorAll('.Editor')[0];
+        const container = document.body.querySelectorAll('.Editor .content')[0];
 
         const myWindow = window.open();
-        myWindow.document.write(container.innerHTML);
 
-        myWindow.setTimeout(() => {
-            myWindow.print();
-            myWindow.close();
-        }, 500);
+        const html = `
+            <html>
+                <head>
+                    <style>
+                        * {
+                            box-sizing: border-box;
+                        }
+                        .page {
+                            overflow: hidden;
+                            position: relative;
+                        }
+                        .container-editable {
+                            position: absolute;
+                            outline: none;
+                        }
+                        body {
+                            margin:0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${container.innerHTML}
+                </body>
+            </html>
+        `;
+
+        myWindow.document.write(html);
+
+        myWindow.print();
+        // myWindow.close();
     };
 
     render() {
