@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import Galeria from './Galeria';
 import Editor from './Editor';
 import { Provider } from 'react-redux';
@@ -12,10 +11,10 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <div className="App">
+                <React.Fragment>
                     <Galeria />
                     <Editor />
-                </div>
+                </React.Fragment>
             </Provider>
         );
     }
