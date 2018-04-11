@@ -1,0 +1,27 @@
+.ZoomController {
+    background-color: #333;
+    border-radius: 2.5%;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 125px;
+    height: 40px;
+    position: absolute;
+    bottom: 15px;
+    right: 25px;
+}
+
+.ZoomController button {
+    border: none;
+    background-color: #333;
+    border-radius: 50%;
+    color: white;
+    width: 25px;
+    height: 25px;
+    outline: none;
+}
+
+.ZoomController button:hover {
+    background-color: #666;
+}

@@ -1,0 +1,24 @@
+.EditBar {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #333;
+}
+
+.EditBar button {
+    height: 100%;
+    background-color: transparent;
+    border: 1px solid #333;
+    border-radius: 5%;
+    padding: 10px;
+    margin: auto 2.5px;
+}
+
+.filtrosImg {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.containerFiltro {
+    display: flex;
+    flex-direction: column;
+}

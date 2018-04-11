@@ -1,0 +1,26 @@
+.Galeria input {
+    display: none;
+}
+
+.Galeria .image {
+    max-width: 400px;
+    max-height: 400px;
+}
+
+.Galeria .image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.Galeria {
+    width: 300px;
+    background-color: #20232a;
+    display: flex;
+    flex-direction: column;
+}
+
+.Galeria .textDraggable {
+    border: 1px solid black;
+    padding: 10px;
+    color: white;
+}
