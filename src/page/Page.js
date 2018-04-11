@@ -5,6 +5,34 @@ import { TYPES_EDITABLE, ALIGN } from '../Constantes';
 import { EditBarText, EditBarImg } from '../editBar/EditBar';
 import './Page.css';
 
+// method extracted from https://stackoverflow.com/questions/279749/detecting-the-system-dpi-ppi-from-js-css/39795416#39795416
+const getDPI = () => {
+    const findFirstPositive = b => {
+        let i = 1;
+        let a;
+        const c = (d, e) =>
+            e >= d
+                ? ((a = d + (e - d) / 2),
+                  0 < b(a) && (a == d || 0 >= b(a - 1)) ? a : 0 >= b(a) ? c(a + 1, e) : c(d, a - 1))
+                : -1;
+        for (; 0 >= b(i); ) i *= 2;
+        return c(i / 2, i) | 0;
+    };
+
+    return findFirstPositive(x => matchMedia(`(max-resolution: ${x}dpi)`).matches);
+};
+
+const DPI = getDPI();
+
+const SIZES = {
+    A4: {
+        96: {
+            width: 794,
+            height: 1123
+        }
+    }
+};
+
 const mapStateToProps = (state, props) => {
     return {
         items: state.items,
@@ -31,16 +59,9 @@ const mapDispatchToProps = (dispatch, props) => {
 
 class Page extends Component {
     state = {
-        maxWidth: null,
-        maxHeight: null
+        height: SIZES.A4[DPI].height,
+        width: SIZES.A4[DPI].width
     };
-
-    componentDidMount() {
-        this.setState({
-            maxWidth: this.page.clientWidth,
-            maxHeight: this.page.clientHeight
-        });
-    }
     handleDrop = e => {
         const type = e.nativeEvent.dataTransfer.getData('type');
         const src = e.nativeEvent.dataTransfer.getData('src');
@@ -104,13 +125,14 @@ class Page extends Component {
     renderItems() {
         return this.props.items.map(item => (
             <Editable
+                key={item.id}
                 onDelete={this.props.removeItem}
                 onStartEdit={this.props.startEdit}
                 onToggleCrop={this.props.toggleCrop}
                 changeItem={this.props.changeItem}
-                key={item.id}
                 topStartPage={this.page.offsetTop}
                 leftStartPage={this.page.offsetLeft}
+                zoom={this.props.zoom}
                 {...item}
             />
         ));
@@ -160,7 +182,6 @@ class Page extends Component {
     }
 
     render() {
-        const { maxHeight, maxWidth } = this.state;
         const { zoom } = this.props;
         return (
             <div
@@ -169,8 +190,8 @@ class Page extends Component {
                 onDragOver={this.handleDragOver}
                 onDrop={this.handleDrop}
                 style={{
-                    width: maxWidth ? maxWidth * 0.7 * (zoom / 100) : undefined,
-                    height: maxHeight ? maxHeight * (zoom / 100) : undefined,
+                    width: this.state.width,
+                    height: this.state.height,
                     transform: `scale(${zoom / 100})`
                 }}
             >
