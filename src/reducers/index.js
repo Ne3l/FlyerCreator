@@ -36,6 +36,13 @@ const startEdit = (state, action) => {
     };
 };
 
+const stopEdit = (state, action) => {
+    return {
+        ...state,
+        items: state.items.map(e => ({ ...e, editing: false }))
+    };
+};
+
 const toggleCrop = (state, action) => {
     return {
         ...state,
@@ -74,6 +81,7 @@ export const reducer = createReducer(
         ADD_ITEM: addItem,
         REMOVE_ITEM: removeItem,
         START_EDIT: startEdit,
+        STOP_EDIT: stopEdit,
         TOGGLE_CROP: toggleCrop,
         CHANGE_ITEM: changeItem,
         CHANGE_ZOOM: changeZoom
