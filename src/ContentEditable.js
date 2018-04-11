@@ -11,6 +11,7 @@ export default class ContentEditable extends React.Component {
         return (
             <div
                 {...props}
+                className="contentEditable"
                 ref={e => (this.htmlEl = e)}
                 onInput={this.emitChange}
                 onBlur={onBlur || this.emitChange}
