@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch, props) => {
     };
 };
 
-const STEPS = [10, 25, 50, 63, 75, 83, 100, 125, 150, 175, 200, 300];
+const STEPS = [25, 50, 63, 75, 83, 100, 125, 150, 175, 200, 300];
 
 class ZoomController extends Component {
     render() {
