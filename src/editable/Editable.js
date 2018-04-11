@@ -6,6 +6,8 @@ import './Editable.css';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import { throttle } from 'lodash';
+import { Resizable } from '../resizable';
+import { Rotable } from '../rotable';
 
 let cropper;
 
@@ -204,132 +206,7 @@ class Editable extends Component {
     renderEditBox() {
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
             return (
-                <React.Fragment>
-                    <div
-                        className="arrow right"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.TOP_LEFT)}
-                        style={{ top: -10, left: -10 }}
-                    />
-                    <div
-                        className="arrow top"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.TOP_CENTER)}
-                        style={{ top: -10, left: 'calc(50% - 10px)' }}
-                    />
-                    <div
-                        className="arrow left"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.TOP_RIGHT)}
-                        style={{ top: -10, right: -10 }}
-                    />
-                    <div
-                        className="arrow vertical"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.LEFT_CENTER)}
-                        style={{ bottom: 'calc(50% - 10px)', left: -10 }}
-                    />
-                    <div style={{ display: 'block' }}>
-                        <img
-                            ref={image => (this.image = image)}
-                            src={this.props.src}
-                            style={{
-                                width: this.props.width,
-                                height: this.props.height,
-                                transform: cls({
-                                    'rotateX(180deg)': this.props.rotateX,
-                                    'rotateY(180deg)': this.props.rotateY
-                                }),
-                                filter: cls({
-                                    [`sepia(${this.props.sepia}%)`]: this.props.sepia,
-                                    [`grayscale(${this.props.gray}%)`]: this.props.gray,
-                                    [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
-                                    [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
-                                    [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
-                                    [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
-                                })
-                            }}
-                            alt="img"
-                            className={cls('image-preview', { cropping: this.props.cropping })}
-                        />
-                    </div>
-
-                    <div
-                        className="arrow vertical"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.RIGHT_CENTER)}
-                        style={{ bottom: 'calc(50% - 10px)', right: -10 }}
-                    />
-                    <div
-                        className="arrow left"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.BOTTOM_LEFT)}
-                        style={{ bottom: -10, left: -10 }}
-                    />
-                    <div
-                        className="arrow bottom"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.BOTTOM_CENTER)}
-                        style={{ bottom: -10, left: 'calc(50% - 10px)' }}
-                    />
-                    <div
-                        className="arrow right"
-                        onMouseDown={this.handleMouseDownArrow(POSITIONS.BOTTOM_RIGHT)}
-                        style={{ bottom: -10, right: -10 }}
-                    />
-                    <div
-                        className="rotate"
-                        onMouseDown={e => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (this.props.cropping) return;
-                            this.setState({
-                                rotating: true,
-                                widthStart: this.props.width,
-                                heightStart: this.props.height,
-                                leftStart: this.props.left,
-                                topStart: this.props.top
-                            });
-                        }}
-                        style={{
-                            transform: `rotate(${360 - this.props.rotate}deg)`
-                        }}
-                    >
-                        {Math.floor(this.props.rotate)}°
-                    </div>
-                </React.Fragment>
-            );
-        }
-        return (
-            <React.Fragment>
-                <div
-                    className="arrow vertical"
-                    onMouseDown={this.handleMouseDownArrow(POSITIONS.LEFT_CENTER)}
-                    style={{ bottom: 'calc(50% - 10px)', left: -10 }}
-                />
-
-                <ContentEditable
-                    ref={contentEditable => (this.contentEditable = contentEditable)}
-                    html={this.props.text}
-                    style={{
-                        fontSize: this.props.fontSize,
-                        color: this.props.color,
-                        fontWeight: this.props.bold ? 'bold' : 'normal',
-                        fontStyle: this.props.italic ? 'italic' : 'normal',
-                        fontFamily: this.props.fontFamily,
-                        letterSpacing: `${this.props.letterSpace / 100}em`,
-                        lineHeight: `${this.props.lineHeight}`,
-                        textAlign: cls({
-                            left: this.props.align === ALIGN.LEFT,
-                            center: this.props.align === ALIGN.CENTER,
-                            right: this.props.align === ALIGN.RIGHT
-                        })
-                    }}
-                    onChange={ev => this.props.changeItem({ text: ev.target.value })}
-                >
-                    {this.props.text}
-                </ContentEditable>
-
-                <div
-                    className="arrow vertical"
-                    onMouseDown={this.handleMouseDownArrow(POSITIONS.RIGHT_CENTER)}
-                    style={{ bottom: 'calc(50% - 10px)', right: -10 }}
-                />
-                <div
-                    className="rotate"
+                <Rotable
                     onMouseDown={e => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -337,18 +214,92 @@ class Editable extends Component {
                         this.setState({
                             rotating: true,
                             widthStart: this.props.width,
-                            heightStart: this.contentEditable.htmlEl.offsetHeight,
+                            heightStart: this.props.height,
                             leftStart: this.props.left,
                             topStart: this.props.top
                         });
                     }}
-                    style={{
-                        transform: `rotate(${360 - this.props.rotate}deg)`
-                    }}
+                    degrees={this.props.rotate}
                 >
-                    {Math.floor(this.props.rotate)}°
-                </div>
-            </React.Fragment>
+                    <Resizable
+                        onMouseDown={this.handleMouseDownArrow}
+                        TOP_LEFT
+                        TOP_CENTER
+                        TOP_RIGHT
+                        LEFT_CENTER
+                        RIGHT_CENTER
+                        BOTTOM_LEFT
+                        BOTTOM_CENTER
+                        BOTTOM_RIGHT
+                    >
+                        <div style={{ display: 'block' }}>
+                            <img
+                                ref={image => (this.image = image)}
+                                src={this.props.src}
+                                style={{
+                                    width: this.props.width,
+                                    height: this.props.height,
+                                    transform: cls({
+                                        'rotateX(180deg)': this.props.rotateX,
+                                        'rotateY(180deg)': this.props.rotateY
+                                    }),
+                                    filter: cls({
+                                        [`sepia(${this.props.sepia}%)`]: this.props.sepia,
+                                        [`grayscale(${this.props.gray}%)`]: this.props.gray,
+                                        [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
+                                        [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
+                                        [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
+                                        [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
+                                    })
+                                }}
+                                alt="img"
+                                className={cls('image-preview', { cropping: this.props.cropping })}
+                            />
+                        </div>
+                    </Resizable>
+                </Rotable>
+            );
+        }
+        return (
+            <Rotable
+                onMouseDown={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (this.props.cropping) return;
+                    this.setState({
+                        rotating: true,
+                        widthStart: this.props.width,
+                        heightStart: this.contentEditable.htmlEl.offsetHeight,
+                        leftStart: this.props.left,
+                        topStart: this.props.top
+                    });
+                }}
+                degrees={this.props.rotate}
+            >
+                <Resizable onMouseDown={this.handleMouseDownArrow} LEFT_CENTER RIGHT_CENTER>
+                    <ContentEditable
+                        ref={contentEditable => (this.contentEditable = contentEditable)}
+                        html={this.props.text}
+                        style={{
+                            fontSize: this.props.fontSize,
+                            color: this.props.color,
+                            fontWeight: this.props.bold ? 'bold' : 'normal',
+                            fontStyle: this.props.italic ? 'italic' : 'normal',
+                            fontFamily: this.props.fontFamily,
+                            letterSpacing: `${this.props.letterSpace / 100}em`,
+                            lineHeight: `${this.props.lineHeight}`,
+                            textAlign: cls({
+                                left: this.props.align === ALIGN.LEFT,
+                                center: this.props.align === ALIGN.CENTER,
+                                right: this.props.align === ALIGN.RIGHT
+                            })
+                        }}
+                        onChange={ev => this.props.changeItem({ text: ev.target.value })}
+                    >
+                        {this.props.text}
+                    </ContentEditable>
+                </Resizable>
+            </Rotable>
         );
     }
 
@@ -402,7 +353,7 @@ class Editable extends Component {
     }
 
     render() {
-        const { top, topStartPage, leftStartPage, left, width, height, type, editing } = this.props;
+        const { top, topStartPage, leftStartPage, left, type, editing } = this.props;
         return (
             <div
                 ref={container => (this.container = container)}
@@ -419,8 +370,6 @@ class Editable extends Component {
                     this.setState({ move: true, cordX: e.clientX - left, cordY: e.clientY - top });
                 }}
                 style={{
-                    // width: width,
-                    // height: height,
                     transform: cls(`translate(${left - leftStartPage}px,${top - topStartPage}px)`, {
                         [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0
                     })
