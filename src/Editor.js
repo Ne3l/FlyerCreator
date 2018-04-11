@@ -19,6 +19,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         changeItem(item) {
             dispatch({ type: 'CHANGE_ITEM', item });
+        },
+        stopEdit(e) {
+            dispatch({ type: 'STOP_EDIT' });
         }
     };
 };
@@ -72,7 +75,7 @@ class Editor extends Component {
             <div className="Editor">
                 {this.renderEditBar()}
                 <ZoomController />
-                <div className="content">
+                <div className="content" onClick={this.props.stopEdit}>
                     <Page />
                 </div>
             </div>
