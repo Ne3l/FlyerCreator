@@ -210,24 +210,38 @@ class Editable extends Component {
     };
 
     renderImg() {
+        const {
+            src,
+            width,
+            height,
+            rotateX,
+            rotateY,
+            sepia,
+            gray,
+            saturation,
+            brightness,
+            opacity,
+            contrast,
+            zoom
+        } = this.props;
         return (
             <img
                 ref={image => (this.image = image)}
-                src={this.props.src}
+                src={src}
                 style={{
-                    width: this.props.width,
-                    height: this.props.height,
+                    width: width * zoom,
+                    height: height * zoom,
                     transform: cls({
-                        'rotateX(180deg)': this.props.rotateX,
-                        'rotateY(180deg)': this.props.rotateY
+                        'rotateX(180deg)': rotateX,
+                        'rotateY(180deg)': rotateY
                     }),
                     filter: cls({
-                        [`sepia(${this.props.sepia}%)`]: this.props.sepia,
-                        [`grayscale(${this.props.gray}%)`]: this.props.gray,
-                        [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
-                        [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
-                        [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
-                        [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
+                        [`sepia(${sepia}%)`]: sepia,
+                        [`grayscale(${gray}%)`]: gray,
+                        [`saturate(${saturation}%)`]: saturation !== 100,
+                        [`brightness(${brightness}%)`]: brightness !== 100,
+                        [`opacity(${opacity}%)`]: opacity !== 100,
+                        [`contrast(${contrast}%)`]: contrast !== 100
                     })
                 }}
                 alt="img"
@@ -256,6 +270,7 @@ class Editable extends Component {
                 >
                     <Resizable
                         onMouseDown={this.handleMouseDownArrow}
+                        visible={!this.props.cropping}
                         TOP_LEFT
                         TOP_CENTER
                         TOP_RIGHT
@@ -287,7 +302,12 @@ class Editable extends Component {
                 visible={!this.props.cropping}
                 degrees={this.props.rotate}
             >
-                <Resizable onMouseDown={this.handleMouseDownArrow} LEFT_CENTER RIGHT_CENTER>
+                <Resizable
+                    visible={!this.props.cropping}
+                    onMouseDown={this.handleMouseDownArrow}
+                    LEFT_CENTER
+                    RIGHT_CENTER
+                >
                     <ContentEditable
                         ref={contentEditable => (this.contentEditable = contentEditable)}
                         html={this.props.text}
@@ -341,7 +361,8 @@ class Editable extends Component {
     }
 
     render() {
-        const { top, topStartPage, leftStartPage, left, height, width, type, zoom, editing } = this.props;
+        const { top, left, height, width, topStartPage, leftStartPage, type, zoom, editing } = this.props;
+
         return (
             <div
                 ref={container => (this.container = container)}
@@ -363,7 +384,7 @@ class Editable extends Component {
                 style={{
                     width: width * zoom,
                     height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
-                    transform: cls(`translate(${left - leftStartPage}px,${top - topStartPage}px)`, {
+                    transform: cls(`translate(${(left - leftStartPage) * zoom}px,${(top - topStartPage) * zoom}px)`, {
                         [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0,
                         [`scale(${zoom}`]: this.props.type === TYPES_EDITABLE.TEXT
                     })
