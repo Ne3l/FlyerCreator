@@ -18,7 +18,7 @@ export const Resizable = ({
         <React.Fragment>
             {TOP_LEFT && (
                 <div
-                    className="arrow right"
+                    className="arrow top left"
                     onMouseDown={onMouseDown(POSITIONS.TOP_LEFT)}
                     style={{ top: -10, left: -10 }}
                 />
@@ -32,14 +32,14 @@ export const Resizable = ({
             )}
             {TOP_RIGHT && (
                 <div
-                    className="arrow left"
+                    className="arrow top right"
                     onMouseDown={onMouseDown(POSITIONS.TOP_RIGHT)}
                     style={{ top: -10, right: -10 }}
                 />
             )}
             {LEFT_CENTER && (
                 <div
-                    className="arrow vertical"
+                    className="arrow left"
                     onMouseDown={onMouseDown(POSITIONS.LEFT_CENTER)}
                     style={{ bottom: 'calc(50% - 10px)', left: -10 }}
                 />
@@ -48,14 +48,14 @@ export const Resizable = ({
 
             {RIGHT_CENTER && (
                 <div
-                    className="arrow vertical"
+                    className="arrow right"
                     onMouseDown={onMouseDown(POSITIONS.RIGHT_CENTER)}
                     style={{ bottom: 'calc(50% - 10px)', right: -10 }}
                 />
             )}
             {BOTTOM_LEFT && (
                 <div
-                    className="arrow left"
+                    className="arrow bottom left"
                     onMouseDown={onMouseDown(POSITIONS.BOTTOM_LEFT)}
                     style={{ bottom: -10, left: -10 }}
                 />
@@ -69,7 +69,7 @@ export const Resizable = ({
             )}
             {BOTTOM_RIGHT && (
                 <div
-                    className="arrow right"
+                    className="arrow bottom right"
                     onMouseDown={onMouseDown(POSITIONS.BOTTOM_RIGHT)}
                     style={{ bottom: -10, right: -10 }}
                 />

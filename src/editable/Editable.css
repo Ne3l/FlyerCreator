@@ -1,43 +1,11 @@
 .container-editable {
     position: absolute;
-    padding: 15px;
     outline: none;
+    cursor: move;
 }
 
 .container-editable.editing {
     border: 1px dashed black;
-}
-
-.container-editable.move {
-    cursor: move;
-}
-
-.arrow {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #666;
-    border-radius: 50%;
-}
-
-.arrow.left {
-    cursor: nesw-resize;
-}
-
-.arrow.right {
-    cursor: nwse-resize;
-}
-
-.arrow.top {
-    cursor: n-resize;
-}
-
-.arrow.bottom {
-    cursor: s-resize;
-}
-
-.arrow.vertical {
-    cursor: e-resize;
 }
 
 .container-editable .image-preview {
@@ -59,4 +27,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.container-editable .contentEditable {
+    margin: 15px;
+    outline: none;
+    cursor: text;
 }

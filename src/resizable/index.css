@@ -1,0 +1,60 @@
+.arrow {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 100;
+}
+
+.arrow:before {
+    position: absolute;
+    content: '';
+    background: #3f4652;
+    width: 10px;
+    height: 10px;
+    left: 3px;
+    top: 3px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    transition: background 0.15s linear;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.arrow.top.left,
+.arrow.top.left::before {
+    cursor: nwse-resize;
+}
+
+.arrow.top.right,
+.arrow.top.right::before {
+    cursor: nesw-resize;
+}
+
+.arrow.bottom.left,
+.arrow.bottom.left::before {
+    cursor: sw-resize;
+}
+
+.arrow.bottom.right,
+.arrow.bottom.right::before {
+    cursor: se-resize;
+}
+
+.arrow.left,
+.arrow.left::before {
+    cursor: w-resize;
+}
+
+.arrow.right,
+.arrow.right::before {
+    cursor: e-resize;
+}
+
+.arrow.top,
+.arrow.top::before {
+    cursor: n-resize;
+}
+
+.arrow.bottom,
+.arrow.bottom::before {
+    cursor: s-resize;
+}
