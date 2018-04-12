@@ -65,8 +65,12 @@ class Editable extends Component {
                 cropper = null;
             }
         }
-        if (this.props.editing !== prevProps.editing && this.props.editing) {
-            this.container.focus();
+        if (this.props.editing !== prevProps.editing) {
+            if (this.props.editing) {
+                this.container.focus();
+            } else {
+                this.props.onEndEdit();
+            }
         }
     }
 
@@ -198,11 +202,6 @@ class Editable extends Component {
         let tecla = e.which ? e.which : e.keyCode;
         if (this.props.type === TYPES_EDITABLE.TEXT && this.props.editing && e.target.contentEditable === 'true')
             return;
-
-        // 67 = key C
-        // if (e.ctrlKey && tecla === 67) {
-        //     console.log(navigator.clipboard);
-        // }
 
         if (tecla === TECLAS_ESPECIALES.DELETE) {
             this.props.onDelete({ id: this.props.id });
@@ -360,9 +359,24 @@ class Editable extends Component {
         );
     }
 
-    render() {
-        const { top, left, height, width, topStartPage, leftStartPage, type, zoom, editing } = this.props;
+    getCords() {
+        const { top, left, topStartPage, leftStartPage, zoom, type, editing } = this.props;
 
+        let x = (left - leftStartPage) * zoom;
+        let y = (top - topStartPage) * zoom;
+
+        if (editing && type === TYPES_EDITABLE.TEXT) {
+            x = x - 16;
+            y = y - 16;
+        }
+
+        return { x, y };
+    }
+
+    render() {
+        const { top, left, height, width, type, zoom, editing } = this.props;
+
+        const cords = this.getCords();
         return (
             <div
                 ref={container => (this.container = container)}
@@ -385,7 +399,7 @@ class Editable extends Component {
                 style={{
                     width: width * zoom,
                     height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
-                    transform: cls(`translate(${(left - leftStartPage) * zoom}px,${(top - topStartPage) * zoom}px)`, {
+                    transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
                         [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0,
                         [`scale(${zoom}`]: this.props.type === TYPES_EDITABLE.TEXT
                     })
