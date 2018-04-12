@@ -27,8 +27,8 @@ const DPI = getDPI();
 const SIZES = {
     A4: {
         96: {
-            width: 794,
-            height: 1123
+            width: 794 - 1,
+            height: 1123 - 1
         }
     }
 };
@@ -60,8 +60,18 @@ const mapDispatchToProps = (dispatch, props) => {
 class Page extends Component {
     state = {
         height: SIZES.A4[DPI].height,
-        width: SIZES.A4[DPI].width
+        width: SIZES.A4[DPI].width,
+        topStartPage: 0,
+        leftStartPage: 0
     };
+
+    componentDidMount() {
+        this.setState({
+            topStartPage: this.page.offsetTop,
+            leftStartPage: this.page.offsetLeft
+        });
+    }
+
     handleDrop = e => {
         const type = e.nativeEvent.dataTransfer.getData('type');
         const src = e.nativeEvent.dataTransfer.getData('src');
@@ -130,8 +140,8 @@ class Page extends Component {
                 onStartEdit={this.props.startEdit}
                 onToggleCrop={this.props.toggleCrop}
                 changeItem={this.props.changeItem}
-                topStartPage={this.page.offsetTop}
-                leftStartPage={this.page.offsetLeft}
+                topStartPage={this.state.topStartPage}
+                leftStartPage={this.state.leftStartPage}
                 zoom={this.props.zoom}
                 {...item}
             />
@@ -190,9 +200,8 @@ class Page extends Component {
                 onDragOver={this.handleDragOver}
                 onDrop={this.handleDrop}
                 style={{
-                    width: this.state.width,
-                    height: this.state.height,
-                    transform: `scale(${zoom})`
+                    width: this.state.width * zoom,
+                    height: this.state.height * zoom
                 }}
             >
                 {this.renderItems()}

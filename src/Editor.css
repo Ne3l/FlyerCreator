@@ -22,4 +22,5 @@
     border: 1px solid black;
     overflow: hidden;
     position: relative;
+    margin: 25px;
 }
