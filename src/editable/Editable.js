@@ -371,6 +371,7 @@ class Editable extends Component {
                     e.stopPropagation();
                     this.props.onStartEdit({ id: this.props.id });
                 }}
+                onCopy={this.props.copyItem}
                 onKeyDown={this.handleKeyDown}
                 tabIndex="0"
                 onMouseDown={e => {

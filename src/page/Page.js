@@ -36,6 +36,7 @@ const SIZES = {
 const mapStateToProps = (state, props) => {
     return {
         items: state.items,
+        copy: state.copy,
         zoom: state.zoom
     };
 };
@@ -53,6 +54,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         changeItem(item) {
             dispatch({ type: 'CHANGE_ITEM', item });
+        },
+        copyItem(item) {
+            dispatch({ type: 'COPY_ITEM', item });
         }
     };
 };
@@ -127,6 +131,15 @@ class Page extends Component {
         e.stopPropagation();
     };
 
+    handlePaste = e => {
+        if (!this.props.copy) return;
+        this.props.addItem({
+            ...this.props.copy,
+            left: this.props.copy.left + 20,
+            top: this.props.copy.top + 20
+        });
+    };
+
     handleDragOver = e => {
         e.preventDefault();
         e.stopPropagation();
@@ -142,6 +155,10 @@ class Page extends Component {
                 changeItem={this.props.changeItem}
                 topStartPage={this.state.topStartPage}
                 leftStartPage={this.state.leftStartPage}
+                copyItem={e => {
+                    console.log(e);
+                    this.props.copyItem(item);
+                }}
                 zoom={this.props.zoom}
                 {...item}
             />
@@ -197,6 +214,7 @@ class Page extends Component {
             <div
                 className="page"
                 ref={page => (this.page = page)}
+                onPaste={this.handlePaste}
                 onDragOver={this.handleDragOver}
                 onDrop={this.handleDrop}
                 style={{

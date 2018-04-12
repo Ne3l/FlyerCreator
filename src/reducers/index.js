@@ -72,18 +72,27 @@ const changeZoom = (state, action) => {
     };
 };
 
+const copyItem = (state, action) => {
+    return {
+        ...state,
+        copy: action.item
+    };
+};
+
 export const reducer = createReducer(
     {
         items: [],
-        zoom: 1
+        zoom: 1,
+        copy: null
     },
     {
         ADD_ITEM: addItem,
+        CHANGE_ITEM: changeItem,
+        CHANGE_ZOOM: changeZoom,
+        COPY_ITEM: copyItem,
         REMOVE_ITEM: removeItem,
         START_EDIT: startEdit,
         STOP_EDIT: stopEdit,
-        TOGGLE_CROP: toggleCrop,
-        CHANGE_ITEM: changeItem,
-        CHANGE_ZOOM: changeZoom
+        TOGGLE_CROP: toggleCrop
     }
 );
