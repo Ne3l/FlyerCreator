@@ -94,7 +94,7 @@ class Page extends Component {
                     italic: false,
                     align: ALIGN.LEFT,
                     lineHeight: 1.4,
-                    letterSpace: 20
+                    letterSpace: 10
                 });
                 break;
             case TYPES_EDITABLE.IMAGE:
