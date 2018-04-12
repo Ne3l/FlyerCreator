@@ -5,6 +5,7 @@ import './index.css';
 export const Resizable = ({
     children,
     onMouseDown,
+    visible = true,
     TOP_LEFT,
     TOP_CENTER,
     TOP_RIGHT,
@@ -14,6 +15,7 @@ export const Resizable = ({
     BOTTOM_CENTER,
     BOTTOM_RIGHT
 }) => {
+    if (!visible) return children;
     return (
         <React.Fragment>
             {TOP_LEFT && (
