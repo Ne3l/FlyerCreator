@@ -243,7 +243,6 @@ class Editable extends Component {
                     onMouseDown={e => {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (this.props.cropping) return;
                         this.setState({
                             rotating: true,
                             widthStart: this.props.width,
@@ -252,6 +251,7 @@ class Editable extends Component {
                             topStart: this.props.top
                         });
                     }}
+                    visible={!this.props.cropping}
                     degrees={this.props.rotate}
                 >
                     <Resizable
@@ -276,7 +276,6 @@ class Editable extends Component {
                 onMouseDown={e => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (this.props.cropping) return;
                     this.setState({
                         rotating: true,
                         widthStart: this.props.width,
@@ -285,6 +284,7 @@ class Editable extends Component {
                         topStart: this.props.top
                     });
                 }}
+                visible={!this.props.cropping}
                 degrees={this.props.rotate}
             >
                 <Resizable onMouseDown={this.handleMouseDownArrow} LEFT_CENTER RIGHT_CENTER>
