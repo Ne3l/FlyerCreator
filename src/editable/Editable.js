@@ -9,6 +9,8 @@ import { throttle } from 'lodash';
 import { Resizable } from '../resizable';
 import { Rotable } from '../rotable';
 
+const NOOP = () => {};
+
 let cropper;
 
 class Editable extends Component {
@@ -410,5 +412,11 @@ class Editable extends Component {
         );
     }
 }
+
+Editable.defaultProps = {
+    onEndEdit: NOOP,
+    onToggleCrop: NOOP,
+    onDelete: NOOP
+};
 
 export default Editable;

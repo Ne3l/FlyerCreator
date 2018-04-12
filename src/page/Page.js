@@ -5,8 +5,6 @@ import { TYPES_EDITABLE, ALIGN } from '../Constantes';
 import { EditBarText, EditBarImg } from '../editBar/EditBar';
 import './Page.css';
 
-const NOOP = () => {};
-
 // method extracted from https://stackoverflow.com/questions/279749/detecting-the-system-dpi-ppi-from-js-css/39795416#39795416
 const getDPI = () => {
     const findFirstPositive = b => {
@@ -228,11 +226,5 @@ class Page extends Component {
         );
     }
 }
-
-Page.defaultProps = {
-    onEndEdit: NOOP,
-    onToggleCrop: NOOP,
-    onDelete: NOOP
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);
