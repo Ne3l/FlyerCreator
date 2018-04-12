@@ -192,7 +192,7 @@ class Page extends Component {
                 style={{
                     width: this.state.width,
                     height: this.state.height,
-                    transform: `scale(${zoom / 100})`
+                    transform: `scale(${zoom})`
                 }}
             >
                 {this.renderItems()}

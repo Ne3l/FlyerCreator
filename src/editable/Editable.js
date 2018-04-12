@@ -361,11 +361,11 @@ class Editable extends Component {
                     this.setState({ move: true, cordX: e.clientX - left, cordY: e.clientY - top });
                 }}
                 style={{
-                    width: width * zoom / 100,
-                    height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom / 100 : undefined,
+                    width: width * zoom,
+                    height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
                     transform: cls(`translate(${left - leftStartPage}px,${top - topStartPage}px)`, {
                         [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0,
-                        [`scale(${zoom / 100}`]: this.props.type === TYPES_EDITABLE.TEXT
+                        [`scale(${zoom}`]: this.props.type === TYPES_EDITABLE.TEXT
                     })
                 }}
             >

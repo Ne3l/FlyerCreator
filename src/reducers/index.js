@@ -75,7 +75,7 @@ const changeZoom = (state, action) => {
 export const reducer = createReducer(
     {
         items: [],
-        zoom: 100
+        zoom: 1
     },
     {
         ADD_ITEM: addItem,
