@@ -126,6 +126,7 @@ class Editable extends Component {
             move,
             rotating
         } = this.state;
+
         if (resize) {
             switch (position) {
                 case POSITIONS.TOP_LEFT:
@@ -198,10 +199,42 @@ class Editable extends Component {
         if (this.props.type === TYPES_EDITABLE.TEXT && this.props.editing && e.target.contentEditable === 'true')
             return;
 
+        // 67 = key C
+        // if (e.ctrlKey && tecla === 67) {
+        //     console.log(navigator.clipboard);
+        // }
+
         if (tecla === TECLAS_ESPECIALES.DELETE) {
             this.props.onDelete({ id: this.props.id });
         }
     };
+
+    renderImg() {
+        return (
+            <img
+                ref={image => (this.image = image)}
+                src={this.props.src}
+                style={{
+                    width: this.props.width,
+                    height: this.props.height,
+                    transform: cls({
+                        'rotateX(180deg)': this.props.rotateX,
+                        'rotateY(180deg)': this.props.rotateY
+                    }),
+                    filter: cls({
+                        [`sepia(${this.props.sepia}%)`]: this.props.sepia,
+                        [`grayscale(${this.props.gray}%)`]: this.props.gray,
+                        [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
+                        [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
+                        [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
+                        [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
+                    })
+                }}
+                alt="img"
+                className={cls('image-preview', { cropping: this.props.cropping })}
+            />
+        );
+    }
 
     renderEditBox() {
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
@@ -232,34 +265,12 @@ class Editable extends Component {
                         BOTTOM_CENTER
                         BOTTOM_RIGHT
                     >
-                        <div style={{ display: 'block' }}>
-                            <img
-                                ref={image => (this.image = image)}
-                                src={this.props.src}
-                                style={{
-                                    width: this.props.width,
-                                    height: this.props.height,
-                                    transform: cls({
-                                        'rotateX(180deg)': this.props.rotateX,
-                                        'rotateY(180deg)': this.props.rotateY
-                                    }),
-                                    filter: cls({
-                                        [`sepia(${this.props.sepia}%)`]: this.props.sepia,
-                                        [`grayscale(${this.props.gray}%)`]: this.props.gray,
-                                        [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
-                                        [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
-                                        [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
-                                        [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
-                                    })
-                                }}
-                                alt="img"
-                                className={cls('image-preview', { cropping: this.props.cropping })}
-                            />
-                        </div>
+                        <div>{this.renderImg()}</div>
                     </Resizable>
                 </Rotable>
             );
         }
+
         return (
             <Rotable
                 onMouseDown={e => {
@@ -305,30 +316,7 @@ class Editable extends Component {
 
     renderChildren() {
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
-            return (
-                <img
-                    ref={image => (this.image = image)}
-                    src={this.props.src}
-                    style={{
-                        width: this.props.width,
-                        height: this.props.height,
-                        transform: cls({
-                            'rotateX(180deg)': this.props.rotateX,
-                            'rotateY(180deg)': this.props.rotateY
-                        }),
-                        filter: cls({
-                            [`sepia(${this.props.sepia}%)`]: this.props.sepia,
-                            [`grayscale(${this.props.gray}%)`]: this.props.gray,
-                            [`saturate(${this.props.saturation}%)`]: this.props.saturation !== 100,
-                            [`brightness(${this.props.brightness}%)`]: this.props.brightness !== 100,
-                            [`opacity(${this.props.opacity}%)`]: this.props.opacity !== 100,
-                            [`contrast(${this.props.contrast}%)`]: this.props.contrast !== 100
-                        })
-                    }}
-                    alt="img"
-                    className="image-preview"
-                />
-            );
+            return this.renderImg();
         }
         return (
             <div
@@ -353,12 +341,15 @@ class Editable extends Component {
     }
 
     render() {
-        const { top, topStartPage, leftStartPage, left, type, editing } = this.props;
+        const { top, topStartPage, leftStartPage, left, height, width, type, zoom, editing } = this.props;
         return (
             <div
                 ref={container => (this.container = container)}
-                className={cls('container-editable', { editing, move: this.state.move })}
-                onClick={e => this.props.onStartEdit({ id: this.props.id })}
+                className={cls('container-editable', { editing })}
+                onClick={e => {
+                    e.stopPropagation();
+                    this.props.onStartEdit({ id: this.props.id });
+                }}
                 onKeyDown={this.handleKeyDown}
                 tabIndex="0"
                 onMouseDown={e => {
@@ -370,8 +361,11 @@ class Editable extends Component {
                     this.setState({ move: true, cordX: e.clientX - left, cordY: e.clientY - top });
                 }}
                 style={{
+                    width: width * zoom / 100,
+                    height: height ? height * zoom / 100 : undefined,
                     transform: cls(`translate(${left - leftStartPage}px,${top - topStartPage}px)`, {
-                        [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0
+                        [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0,
+                        [`scale(${zoom / 100}`]: this.props.type === TYPES_EDITABLE.TEXT
                     })
                 }}
             >
