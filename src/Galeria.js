@@ -1,14 +1,45 @@
 import React, { Component } from 'react';
-import './Galeria.css';
+import { connect } from 'react-redux';
 import { TYPES_EDITABLE } from './Constantes';
+import './Galeria.css';
+
+const mapStateToProps = (state, props) => {
+    return {
+        zoom: state.zoom
+    };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        changeZoom(zoom) {
+            dispatch({ type: 'CHANGE_ZOOM', zoom: zoom });
+        }
+    };
+};
 
 class Galeria extends Component {
     constructor(props) {
         super(props);
         this.state = {
             images: [],
-            error: null
+            error: null,
+            print: false,
+            lastZoom: 1
         };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.print !== prevState.print && this.state.print) {
+            if (this.props.zoom !== 1) {
+                this.props.changeZoom(1);
+            }
+        }
+
+        if (this.props.zoom !== prevProps.zoom) {
+            if (this.state.print && this.props.zoom === 1) {
+                this.printContainer();
+            }
+        }
     }
 
     preview(img) {
@@ -49,7 +80,8 @@ class Galeria extends Component {
         this.fileInput.click();
     };
 
-    printContainer = e => {
+    printContainer() {
+        this.setState({ print: false });
         const container = document.body.querySelectorAll('.Editor .content')[0];
 
         const myWindow = window.open();
@@ -83,8 +115,13 @@ class Galeria extends Component {
         myWindow.document.write(html);
 
         myWindow.print();
-        // myWindow.close();
-    };
+        myWindow.close();
+
+        if (this.state.lastZoom !== 1) {
+            this.setState({ lastZoom: 1 });
+            this.props.changeZoom(this.state.lastZoom);
+        }
+    }
 
     render() {
         return (
@@ -119,7 +156,7 @@ class Galeria extends Component {
                     >
                         add
                     </button>
-                    <button onClick={this.printContainer}> Imprimir</button>
+                    <button onClick={e => this.setState({ print: true, lastZoom: this.props.zoom })}> Imprimir</button>
                 </div>
                 {this.state.images.map(e => (
                     <div key={e.name} className="image">
@@ -150,4 +187,4 @@ class Galeria extends Component {
     }
 }
 
-export default Galeria;
+export default connect(mapStateToProps, mapDispatchToProps)(Galeria);
