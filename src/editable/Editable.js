@@ -368,8 +368,8 @@ class Editable extends Component {
         let y = (top - topStartPage) * zoom;
 
         if (editing && type === TYPES_EDITABLE.TEXT) {
-            x = x - 16;
-            y = y - 16;
+            x = x - 16 * zoom;
+            y = y - 16 * zoom;
         }
 
         return { x, y };
