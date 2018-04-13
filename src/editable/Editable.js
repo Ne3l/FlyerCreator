@@ -5,29 +5,16 @@ import ContentEditable from '../ContentEditable';
 import './Editable.css';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
-import { throttle } from 'lodash';
 import { Resizable } from '../resizable';
 import { Rotable } from '../rotable';
+import { Movable } from '../movable';
 
 const NOOP = () => {};
 
 let cropper;
 
 class Editable extends Component {
-    state = {
-        move: false,
-        cordX: null,
-        cordY: null
-    };
-
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.move !== prevState.move) {
-            if (this.state.move) {
-                this.addDocumentListeners();
-            } else {
-                this.removeDocumentListeners();
-            }
-        }
         if (this.props.cropping !== prevProps.cropping) {
             if (this.props.cropping) {
                 cropper = new Cropper(this.image, {});
@@ -52,37 +39,6 @@ class Editable extends Component {
             }
         }
     }
-
-    addDocumentListeners() {
-        document.addEventListener('mousemove', this.handleMouseMove, false);
-        document.addEventListener('mouseup', this.handleMouseUp, false);
-    }
-
-    removeDocumentListeners() {
-        document.removeEventListener('mousemove', this.handleMouseMove, false);
-        document.removeEventListener('mouseup', this.handleMouseUp, false);
-    }
-
-    handleMouseUp = e => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.setState({
-            move: false,
-            cordX: null,
-            cordY: null
-        });
-    };
-
-    handleMouseMove = throttle(e => {
-        const { cordX, cordY, move } = this.state;
-
-        if (move) {
-            this.props.changeItem({
-                top: e.clientY - cordY,
-                left: e.clientX - cordX
-            });
-        }
-    }, 10);
 
     handleKeyDown = e => {
         let tecla = e.which ? e.which : e.keyCode;
@@ -260,38 +216,32 @@ class Editable extends Component {
 
         const cords = this.getCords();
         return (
-            <div
-                ref={container => (this.container = container)}
-                className={cls('container-editable', { editing })}
-                onClick={e => {
-                    e.stopPropagation();
-                    this.props.onStartEdit({ id: this.props.id });
-                }}
-                onCopy={this.props.copyItem}
-                onKeyDown={this.handleKeyDown}
-                tabIndex="0"
-                onMouseDown={e => {
-                    if (type === TYPES_EDITABLE.IMAGE) {
-                        e.preventDefault();
-                    }
-                    if (type === TYPES_EDITABLE.TEXT && editing && e.target.contentEditable === 'true') return;
-                    e.stopPropagation();
-                    this.setState({ move: true, cordX: e.clientX - left, cordY: e.clientY - top });
-                }}
-                style={{
-                    width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
-                    height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
-                    transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
-                        [`rotate(${rotate}deg)`]: rotate !== 0,
-                        [`translateY(0em) scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
-                    }),
-                    transformOrigin: cls({
-                        'left top 0px': type === TYPES_EDITABLE.TEXT
-                    })
-                }}
-            >
-                {editing ? this.renderEditBox() : this.renderChildren()}
-            </div>
+            <Movable onChange={this.props.changeItem} left={left} top={top} type={type}>
+                <div
+                    ref={container => (this.container = container)}
+                    className={cls('container-editable', { editing })}
+                    onClick={e => {
+                        e.stopPropagation();
+                        this.props.onStartEdit({ id: this.props.id });
+                    }}
+                    onCopy={this.props.copyItem}
+                    onKeyDown={this.handleKeyDown}
+                    tabIndex="0"
+                    style={{
+                        width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
+                        height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
+                        transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
+                            [`rotate(${rotate}deg)`]: rotate !== 0,
+                            [`translateY(0em) scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
+                        }),
+                        transformOrigin: cls({
+                            'left top 0px': type === TYPES_EDITABLE.TEXT
+                        })
+                    }}
+                >
+                    {editing ? this.renderEditBox() : this.renderChildren()}
+                </div>
+            </Movable>
         );
     }
 }
