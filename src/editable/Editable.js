@@ -10,6 +10,7 @@ import { Rotable } from '../rotable';
 import { Movable } from '../movable';
 
 const NOOP = () => {};
+const MARGIN_EDITABLE_TEXT = 16;
 
 let cropper;
 
@@ -92,24 +93,44 @@ class Editable extends Component {
     }
 
     renderEditBox() {
-        if (this.props.type === TYPES_EDITABLE.IMAGE) {
+        const {
+            color,
+            fontFamily,
+            fontSize,
+            italic,
+            bold,
+            letterSpace,
+            lineHeight,
+            align,
+            text,
+            width,
+            left,
+            top,
+            cropping,
+            height,
+            changeItem,
+            type,
+            rotate
+        } = this.props;
+
+        if (type === TYPES_EDITABLE.IMAGE) {
             return (
                 <Rotable
-                    width={this.props.width}
-                    height={this.props.height}
-                    left={this.props.left}
-                    top={this.props.top}
-                    visible={!this.props.cropping}
-                    degrees={this.props.rotate}
-                    onChange={degrees => this.props.changeItem({ rotate: degrees })}
+                    width={width}
+                    height={height}
+                    left={left}
+                    top={top}
+                    visible={!cropping}
+                    degrees={rotate}
+                    onChange={degrees => changeItem({ rotate: degrees })}
                 >
                     <Resizable
-                        visible={!this.props.cropping}
-                        width={this.props.width}
-                        height={this.props.height}
-                        left={this.props.left}
-                        top={this.props.top}
-                        onChange={this.props.changeItem}
+                        visible={!cropping}
+                        width={width}
+                        height={height}
+                        left={left}
+                        top={top}
+                        onChange={changeItem}
                         TOP_LEFT
                         TOP_CENTER
                         TOP_RIGHT
@@ -125,46 +146,45 @@ class Editable extends Component {
             );
         }
 
-        const marginEditableText = 15;
         return (
             <Rotable
-                width={this.props.width - marginEditableText}
-                height={this.props.fontSize * this.props.lineHeight - marginEditableText}
-                left={this.props.left - marginEditableText}
-                top={this.props.top - marginEditableText}
-                visible={!this.props.cropping}
-                degrees={this.props.rotate}
-                onChange={degrees => this.props.changeItem({ rotate: degrees })}
+                width={width - MARGIN_EDITABLE_TEXT}
+                height={fontSize * lineHeight - MARGIN_EDITABLE_TEXT}
+                left={left - MARGIN_EDITABLE_TEXT}
+                top={top - MARGIN_EDITABLE_TEXT}
+                visible={!cropping}
+                degrees={rotate}
+                onChange={degrees => changeItem({ rotate: degrees })}
             >
                 <Resizable
-                    visible={!this.props.cropping}
-                    width={this.props.width}
-                    height={this.props.height}
-                    left={this.props.left}
-                    top={this.props.top}
-                    onChange={this.props.changeItem}
+                    visible={!cropping}
+                    width={width}
+                    height={height}
+                    left={left}
+                    top={top}
+                    onChange={changeItem}
                     LEFT_CENTER
                     RIGHT_CENTER
                 >
                     <ContentEditable
-                        html={this.props.text}
+                        html={text}
                         style={{
-                            fontSize: this.props.fontSize,
-                            color: this.props.color,
-                            fontWeight: this.props.bold ? 'bold' : 'normal',
-                            fontStyle: this.props.italic ? 'italic' : 'normal',
-                            fontFamily: this.props.fontFamily,
-                            letterSpacing: `${this.props.letterSpace / 100}em`,
-                            lineHeight: `${this.props.lineHeight}`,
+                            fontSize: fontSize,
+                            color: color,
+                            fontWeight: bold ? 'bold' : 'normal',
+                            fontStyle: italic ? 'italic' : 'normal',
+                            fontFamily: fontFamily,
+                            letterSpacing: `${letterSpace / 100}em`,
+                            lineHeight: `${lineHeight}`,
                             textAlign: cls({
-                                left: this.props.align === ALIGN.LEFT,
-                                center: this.props.align === ALIGN.CENTER,
-                                right: this.props.align === ALIGN.RIGHT
+                                left: align === ALIGN.LEFT,
+                                center: align === ALIGN.CENTER,
+                                right: align === ALIGN.RIGHT
                             })
                         }}
-                        onChange={ev => this.props.changeItem({ text: ev.target.value })}
+                        onChange={ev => changeItem({ text: ev.target.value })}
                     >
-                        {this.props.text}
+                        {text}
                     </ContentEditable>
                 </Resizable>
             </Rotable>
@@ -172,23 +192,25 @@ class Editable extends Component {
     }
 
     renderChildren() {
+        const { color, fontFamily, fontSize, italic, bold, letterSpace, lineHeight, align } = this.props;
+
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
             return this.renderImg();
         }
         return (
             <div
                 style={{
-                    color: this.props.color,
-                    fontFamily: this.props.fontFamily,
-                    fontSize: this.props.fontSize,
-                    fontStyle: this.props.italic ? 'italic' : 'normal',
-                    fontWeight: this.props.bold ? 'bold' : 'normal',
-                    letterSpacing: `${this.props.letterSpace / 100}em`,
-                    lineHeight: `${this.props.lineHeight}`,
+                    color: color,
+                    fontFamily: fontFamily,
+                    fontSize: fontSize,
+                    fontStyle: italic ? 'italic' : 'normal',
+                    fontWeight: bold ? 'bold' : 'normal',
+                    letterSpacing: `${letterSpace / 100}em`,
+                    lineHeight: `${lineHeight}`,
                     textAlign: cls({
-                        left: this.props.align === ALIGN.LEFT,
-                        center: this.props.align === ALIGN.CENTER,
-                        right: this.props.align === ALIGN.RIGHT
+                        left: align === ALIGN.LEFT,
+                        center: align === ALIGN.CENTER,
+                        right: align === ALIGN.RIGHT
                     })
                 }}
             >
@@ -204,8 +226,8 @@ class Editable extends Component {
         let y = (top - topStartPage) * zoom;
 
         if (editing && type === TYPES_EDITABLE.TEXT) {
-            x = x - 16 * zoom;
-            y = y - 16 * zoom;
+            x = x - MARGIN_EDITABLE_TEXT * zoom;
+            y = y - MARGIN_EDITABLE_TEXT * zoom;
         }
 
         return { x, y };
@@ -231,7 +253,7 @@ class Editable extends Component {
                         width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
                         height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
                         transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
-                            [`rotate(${rotate}deg)`]: rotate !== 0,
+                            [`rotateZ(${rotate}deg)`]: rotate !== 0,
                             [`translateY(0em) scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
                         }),
                         transformOrigin: cls({
