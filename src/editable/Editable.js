@@ -169,12 +169,13 @@ class Editable extends Component {
             );
         }
 
+        const marginEditableText = 15;
         return (
             <Rotable
-                width={this.props.width}
-                height={this.props.fontSize * this.props.lineHeight}
-                left={this.props.left}
-                top={this.props.top}
+                width={this.props.width - marginEditableText}
+                height={this.props.fontSize * this.props.lineHeight - marginEditableText}
+                left={this.props.left - marginEditableText}
+                top={this.props.top - marginEditableText}
                 visible={!this.props.cropping}
                 degrees={this.props.rotate}
                 onChange={degrees => this.props.changeItem({ rotate: degrees })}
@@ -282,7 +283,7 @@ class Editable extends Component {
                     height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
                     transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
                         [`rotate(${rotate}deg)`]: rotate !== 0,
-                        [`scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
+                        [`translateY(0em) scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
                     }),
                     transformOrigin: cls({
                         'left top 0px': type === TYPES_EDITABLE.TEXT

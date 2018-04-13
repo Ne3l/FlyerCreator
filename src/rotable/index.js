@@ -2,25 +2,6 @@ import React, { Component } from 'react';
 import './index.css';
 import { throttle } from 'lodash';
 
-// export const Rotable = ({ children, onMouseDown, degrees, visible = true }) => {
-//     return (
-//         <React.Fragment>
-//             {children}
-//             {visible && (
-//                 <div
-//                     className="rotate"
-//                     onMouseDown={onMouseDown}
-//                     style={{
-//                         transform: `rotate(${360 - degrees}deg)`
-//                     }}
-//                 >
-//                     {Math.floor(degrees)}°
-//                 </div>
-//             )}
-//         </React.Fragment>
-//     );
-// };
-
 export class Rotable extends Component {
     state = {
         rotating: false,
@@ -85,7 +66,7 @@ export class Rotable extends Component {
 
         if (rotating) {
             const imgCenter = { x: leftStart + widthStart / 2, y: topStart + heightStart / 2 };
-            let angle = Math.atan2(imgCenter.y - e.clientY, imgCenter.x - e.clientX) * 180 / Math.PI + 95; // 95? Funciona pero buscar porque.
+            let angle = Math.atan2(imgCenter.y - e.clientY, imgCenter.x - e.clientX) * 180 / Math.PI + 90;
             if (angle < 0) angle = 360 + angle;
 
             this.props.onChange(Math.floor(angle));
