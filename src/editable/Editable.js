@@ -196,7 +196,7 @@ class Editable extends Component {
             let angle = Math.atan2(imgCenter.y - e.clientY, imgCenter.x - e.clientX) * 180 / Math.PI + 95; // 95? Funciona pero buscar porque.
             if (angle < 0) angle = 360 + angle;
 
-            this.props.changeItem({ rotate: angle });
+            this.props.changeItem({ rotate: Math.floor(angle) });
         }
     }, 10);
 
@@ -376,7 +376,7 @@ class Editable extends Component {
     }
 
     render() {
-        const { top, left, height, width, type, zoom, editing } = this.props;
+        const { top, left, height, width, type, zoom, editing, rotate } = this.props;
 
         const cords = this.getCords();
         return (
@@ -399,11 +399,14 @@ class Editable extends Component {
                     this.setState({ move: true, cordX: e.clientX - left, cordY: e.clientY - top });
                 }}
                 style={{
-                    width: width * zoom,
+                    width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
                     height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
                     transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
-                        [`rotate(${Math.floor(this.props.rotate)}deg)`]: this.props.rotate !== 0,
-                        [`scale(${zoom}`]: this.props.type === TYPES_EDITABLE.TEXT
+                        [`rotate(${rotate}deg)`]: rotate !== 0,
+                        [`scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
+                    }),
+                    transformOrigin: cls({
+                        'left top 0px': type === TYPES_EDITABLE.TEXT
                     })
                 }}
             >
