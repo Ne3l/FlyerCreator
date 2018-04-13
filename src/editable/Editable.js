@@ -18,7 +18,6 @@ class Editable extends Component {
         resize: false,
         position: null,
         move: false,
-        rotating: false,
         widthStart: false,
         heightStart: false,
         leftStart: null,
@@ -37,14 +36,6 @@ class Editable extends Component {
         }
         if (this.state.resize !== prevState.resize) {
             if (this.state.resize) {
-                this.addDocumentListeners();
-            } else {
-                this.removeDocumentListeners();
-            }
-        }
-
-        if (this.state.rotating !== prevState.rotating) {
-            if (this.state.rotating) {
                 this.addDocumentListeners();
             } else {
                 this.removeDocumentListeners();
@@ -109,7 +100,6 @@ class Editable extends Component {
             resize: false,
             position: null,
             move: false,
-            rotating: false,
             widthStart: null,
             heightStart: null,
             leftStart: null,
@@ -120,18 +110,7 @@ class Editable extends Component {
     };
 
     handleMouseMove = throttle(e => {
-        const {
-            cordX,
-            cordY,
-            widthStart,
-            heightStart,
-            leftStart,
-            topStart,
-            position,
-            resize,
-            move,
-            rotating
-        } = this.state;
+        const { cordX, cordY, widthStart, heightStart, leftStart, topStart, position, resize, move } = this.state;
 
         if (resize) {
             switch (position) {
@@ -191,13 +170,6 @@ class Editable extends Component {
                 left: e.clientX - cordX
             });
         }
-        if (rotating) {
-            const imgCenter = { x: leftStart + widthStart / 2, y: topStart + heightStart / 2 };
-            let angle = Math.atan2(imgCenter.y - e.clientY, imgCenter.x - e.clientX) * 180 / Math.PI + 95; // 95? Funciona pero buscar porque.
-            if (angle < 0) angle = 360 + angle;
-
-            this.props.changeItem({ rotate: Math.floor(angle) });
-        }
     }, 10);
 
     handleKeyDown = e => {
@@ -255,17 +227,11 @@ class Editable extends Component {
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
             return (
                 <Rotable
-                    onMouseDown={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        this.setState({
-                            rotating: true,
-                            widthStart: this.props.width,
-                            heightStart: this.props.height,
-                            leftStart: this.props.left,
-                            topStart: this.props.top
-                        });
-                    }}
+                    onChange={degrees => this.props.changeItem({ rotate: degrees })}
+                    width={this.props.width}
+                    height={this.props.height}
+                    left={this.props.left}
+                    top={this.props.top}
                     visible={!this.props.cropping}
                     degrees={this.props.rotate}
                 >
@@ -289,17 +255,11 @@ class Editable extends Component {
 
         return (
             <Rotable
-                onMouseDown={e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.setState({
-                        rotating: true,
-                        widthStart: this.props.width,
-                        heightStart: this.contentEditable.htmlEl.offsetHeight,
-                        leftStart: this.props.left,
-                        topStart: this.props.top
-                    });
-                }}
+                onChange={degrees => this.props.changeItem({ rotate: degrees })}
+                width={this.props.width}
+                height={this.props.fontSize * this.props.lineHeight}
+                left={this.props.left}
+                top={this.props.top}
                 visible={!this.props.cropping}
                 degrees={this.props.rotate}
             >
@@ -310,7 +270,6 @@ class Editable extends Component {
                     RIGHT_CENTER
                 >
                     <ContentEditable
-                        ref={contentEditable => (this.contentEditable = contentEditable)}
                         html={this.props.text}
                         style={{
                             fontSize: this.props.fontSize,
