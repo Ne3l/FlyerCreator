@@ -1,6 +1,6 @@
 import cls from 'classnames';
 import React, { Component } from 'react';
-import { ALIGN, POSITIONS, TECLAS_ESPECIALES, TYPES_EDITABLE } from '../Constantes';
+import { ALIGN, TECLAS_ESPECIALES, TYPES_EDITABLE } from '../Constantes';
 import ContentEditable from '../ContentEditable';
 import './Editable.css';
 import Cropper from 'cropperjs';
@@ -15,13 +15,7 @@ let cropper;
 
 class Editable extends Component {
     state = {
-        resize: false,
-        position: null,
         move: false,
-        widthStart: false,
-        heightStart: false,
-        leftStart: null,
-        topStart: null,
         cordX: null,
         cordY: null
     };
@@ -34,14 +28,6 @@ class Editable extends Component {
                 this.removeDocumentListeners();
             }
         }
-        if (this.state.resize !== prevState.resize) {
-            if (this.state.resize) {
-                this.addDocumentListeners();
-            } else {
-                this.removeDocumentListeners();
-            }
-        }
-
         if (this.props.cropping !== prevProps.cropping) {
             if (this.props.cropping) {
                 cropper = new Cropper(this.image, {});
@@ -77,93 +63,19 @@ class Editable extends Component {
         document.removeEventListener('mouseup', this.handleMouseUp, false);
     }
 
-    handleMouseDownArrow = position => e => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.props.cropping) return;
-        this.setState({
-            resize: true,
-            position,
-            widthStart: this.props.width,
-            heightStart: this.props.height,
-            leftStart: this.props.left,
-            topStart: this.props.top,
-            cordX: e.clientX,
-            cordY: e.clientY
-        });
-    };
-
     handleMouseUp = e => {
         e.preventDefault();
         e.stopPropagation();
         this.setState({
-            resize: false,
-            position: null,
             move: false,
-            widthStart: null,
-            heightStart: null,
-            leftStart: null,
-            topStart: null,
             cordX: null,
             cordY: null
         });
     };
 
     handleMouseMove = throttle(e => {
-        const { cordX, cordY, widthStart, heightStart, leftStart, topStart, position, resize, move } = this.state;
+        const { cordX, cordY, move } = this.state;
 
-        if (resize) {
-            switch (position) {
-                case POSITIONS.TOP_LEFT:
-                    this.props.changeItem({
-                        width: Math.max(widthStart + cordX - e.clientX, 0),
-                        height: Math.max(heightStart + cordY - e.clientY, 0),
-                        top: Math.min(topStart + heightStart, topStart - cordY + e.clientY),
-                        left: Math.min(leftStart + widthStart, leftStart - cordX + e.clientX)
-                    });
-                    break;
-                case POSITIONS.TOP_CENTER:
-                    this.props.changeItem({
-                        height: Math.max(heightStart + cordY - e.clientY, 0),
-                        top: Math.min(topStart + heightStart, topStart - cordY + e.clientY)
-                    });
-                    break;
-                case POSITIONS.TOP_RIGHT:
-                    this.props.changeItem({
-                        width: Math.max(widthStart + e.clientX - cordX, 0),
-                        height: Math.max(heightStart + cordY - e.clientY, 0),
-                        top: Math.min(topStart + heightStart, topStart - cordY + e.clientY)
-                    });
-                    break;
-                case POSITIONS.LEFT_CENTER:
-                    this.props.changeItem({
-                        width: Math.max(widthStart + cordX - e.clientX, 0),
-                        left: Math.min(leftStart + widthStart, leftStart - cordX + e.clientX)
-                    });
-                    break;
-                case POSITIONS.RIGHT_CENTER:
-                    this.props.changeItem({ width: Math.max(widthStart + e.clientX - cordX, 0) });
-                    break;
-                case POSITIONS.BOTTOM_LEFT:
-                    this.props.changeItem({
-                        width: Math.max(widthStart + cordX - e.clientX, 0),
-                        height: Math.max(heightStart + e.clientY - cordY, 0),
-                        left: Math.min(leftStart + widthStart, leftStart - cordX + e.clientX)
-                    });
-                    break;
-                case POSITIONS.BOTTOM_CENTER:
-                    this.props.changeItem({ height: Math.max(heightStart + e.clientY - cordY, 0) });
-                    break;
-                case POSITIONS.BOTTOM_RIGHT:
-                    this.props.changeItem({
-                        width: Math.max(widthStart + e.clientX - cordX, 0),
-                        height: Math.max(heightStart + e.clientY - cordY, 0)
-                    });
-                    break;
-                default:
-                    break;
-            }
-        }
         if (move) {
             this.props.changeItem({
                 top: e.clientY - cordY,
@@ -227,17 +139,21 @@ class Editable extends Component {
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
             return (
                 <Rotable
-                    onChange={degrees => this.props.changeItem({ rotate: degrees })}
                     width={this.props.width}
                     height={this.props.height}
                     left={this.props.left}
                     top={this.props.top}
                     visible={!this.props.cropping}
                     degrees={this.props.rotate}
+                    onChange={degrees => this.props.changeItem({ rotate: degrees })}
                 >
                     <Resizable
-                        onMouseDown={this.handleMouseDownArrow}
                         visible={!this.props.cropping}
+                        width={this.props.width}
+                        height={this.props.height}
+                        left={this.props.left}
+                        top={this.props.top}
+                        onChange={this.props.changeItem}
                         TOP_LEFT
                         TOP_CENTER
                         TOP_RIGHT
@@ -255,17 +171,21 @@ class Editable extends Component {
 
         return (
             <Rotable
-                onChange={degrees => this.props.changeItem({ rotate: degrees })}
                 width={this.props.width}
                 height={this.props.fontSize * this.props.lineHeight}
                 left={this.props.left}
                 top={this.props.top}
                 visible={!this.props.cropping}
                 degrees={this.props.rotate}
+                onChange={degrees => this.props.changeItem({ rotate: degrees })}
             >
                 <Resizable
                     visible={!this.props.cropping}
-                    onMouseDown={this.handleMouseDownArrow}
+                    width={this.props.width}
+                    height={this.props.height}
+                    left={this.props.left}
+                    top={this.props.top}
+                    onChange={this.props.changeItem}
                     LEFT_CENTER
                     RIGHT_CENTER
                 >
