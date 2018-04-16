@@ -97,7 +97,8 @@ class Page extends Component {
                     italic: false,
                     align: ALIGN.LEFT,
                     lineHeight: 1.4,
-                    letterSpace: 10
+                    letterSpace: 10,
+                    zIndex: 1
                 });
                 break;
             case TYPES_EDITABLE.IMAGE:
@@ -119,7 +120,8 @@ class Page extends Component {
                     saturation: 100,
                     contrast: 100,
                     opacity: 100,
-                    brightness: 100
+                    brightness: 100,
+                    zIndex: 1
                 });
                 break;
             case TYPES_EDITABLE.CONTAINER:
@@ -134,7 +136,8 @@ class Page extends Component {
                     borderWidth: 1,
                     width: 300,
                     height: 100,
-                    rotate: 0
+                    rotate: 0,
+                    zIndex: 1
                 });
                 break;
             default:

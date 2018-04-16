@@ -43,6 +43,7 @@ class Editor extends Component {
                     align={editItem.align}
                     lineHeight={editItem.lineHeight}
                     letterSpace={editItem.letterSpace}
+                    zIndex={editItem.zIndex}
                     onChange={this.props.changeItem}
                     changeCapitalization={e => {
                         const selection = window.getSelection().toString();
@@ -63,6 +64,7 @@ class Editor extends Component {
                     brightness={editItem.brightness}
                     rotateX={editItem.rotateX}
                     rotateY={editItem.rotateY}
+                    zIndex={editItem.zIndex}
                     onChange={this.props.changeItem}
                     crop={e => this.props.toggleCrop({ id: editItem.id })}
                 />
@@ -76,6 +78,7 @@ class Editor extends Component {
                     borderWidth={editItem.borderWidth}
                     borderColor={editItem.borderColor}
                     borderStyle={editItem.borderStyle}
+                    zIndex={editItem.zIndex}
                     onChange={this.props.changeItem}
                 />
             );

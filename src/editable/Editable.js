@@ -293,7 +293,7 @@ class Editable extends Component {
     }
 
     render() {
-        const { top, left, height, width, type, zoom, editing, rotate } = this.props;
+        const { top, left, height, width, type, zoom, editing, rotate, zIndex } = this.props;
 
         const cords = this.getCords();
         return (
@@ -311,6 +311,7 @@ class Editable extends Component {
                     style={{
                         width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
                         height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
+                        zIndex,
                         transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
                             [`rotateZ(${rotate}deg)`]: rotate !== 0
                         })

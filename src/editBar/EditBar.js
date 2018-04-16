@@ -15,7 +15,8 @@ export const EditBarImg = ({
     saturation,
     contrast,
     opacity,
-    brightness
+    brightness,
+    zIndex
 }) => {
     const change = props => onChange(props);
     const changeSlider = name => ev => change({ [name]: parseInt(ev.target.value, 10) });
@@ -50,12 +51,16 @@ export const EditBarImg = ({
                     Brillo: {brightness}
                     <input type="range" min={0} max={100} value={brightness} onChange={changeSlider('brightness')} />
                 </div>
+                <div className="containerFiltro">
+                    zIndex: {zIndex}
+                    <input type="range" min={0} max={100} value={zIndex} onChange={changeSlider('zIndex')} />
+                </div>
             </div>
         </div>
     );
 };
 
-export const EditBarContainer = ({ backgroundColor, borderWidth, borderStyle, borderColor, onChange }) => {
+export const EditBarContainer = ({ backgroundColor, borderWidth, borderStyle, borderColor, onChange, zIndex }) => {
     const change = props => onChange(props);
     const changeSlider = name => ev => change({ [name]: parseInt(ev.target.value, 10) });
 
@@ -82,6 +87,10 @@ export const EditBarContainer = ({ backgroundColor, borderWidth, borderStyle, bo
             </select>
 
             <ColorInput value={borderColor} onChange={color => change({ borderColor: color })} />
+            <div className="containerFiltro">
+                zIndex: {zIndex}
+                <input type="range" min={0} max={100} value={zIndex} onChange={changeSlider('zIndex')} />
+            </div>
         </div>
     );
 };
@@ -95,6 +104,7 @@ export const EditBarText = ({
     fontFamily,
     letterSpace,
     lineHeight,
+    zIndex,
     onChange,
     changeCapitalization
 }) => {
@@ -141,6 +151,10 @@ export const EditBarText = ({
                     value={lineHeight}
                     onChange={ev => change({ lineHeight: parseFloat(ev.target.value, 10) })}
                 />
+            </div>
+            <div className="containerFiltro">
+                zIndex: {zIndex}
+                <input type="range" min={0} max={100} value={zIndex} onChange={changeSlider('zIndex')} />
             </div>
         </div>
     );
