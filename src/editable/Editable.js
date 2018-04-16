@@ -110,7 +110,8 @@ class Editable extends Component {
             height,
             changeItem,
             type,
-            rotate
+            rotate,
+            zoom
         } = this.props;
 
         if (type === TYPES_EDITABLE.IMAGE) {
@@ -180,7 +181,9 @@ class Editable extends Component {
                                 left: align === ALIGN.LEFT,
                                 center: align === ALIGN.CENTER,
                                 right: align === ALIGN.RIGHT
-                            })
+                            }),
+                            transform: `translateY(0em) scale(${zoom})`,
+                            transformOrigin: 'left top 0px'
                         }}
                         onChange={ev => changeItem({ text: ev.target.value })}
                     >
@@ -192,7 +195,7 @@ class Editable extends Component {
     }
 
     renderChildren() {
-        const { color, fontFamily, fontSize, italic, bold, letterSpace, lineHeight, align } = this.props;
+        const { color, fontFamily, fontSize, italic, bold, letterSpace, lineHeight, align, zoom } = this.props;
 
         if (this.props.type === TYPES_EDITABLE.IMAGE) {
             return this.renderImg();
@@ -211,7 +214,9 @@ class Editable extends Component {
                         left: align === ALIGN.LEFT,
                         center: align === ALIGN.CENTER,
                         right: align === ALIGN.RIGHT
-                    })
+                    }),
+                    transform: `translateY(0em) scale(${zoom}`,
+                    transformOrigin: 'left top 0px'
                 }}
             >
                 {this.props.text}
@@ -253,11 +258,7 @@ class Editable extends Component {
                         width: type === TYPES_EDITABLE.TEXT ? width : width * zoom,
                         height: type === TYPES_EDITABLE.IMAGE && !editing ? height * zoom : undefined,
                         transform: cls(`translate(${cords.x}px,${cords.y}px)`, {
-                            [`rotateZ(${rotate}deg)`]: rotate !== 0,
-                            [`translateY(0em) scale(${zoom}`]: type === TYPES_EDITABLE.TEXT
-                        }),
-                        transformOrigin: cls({
-                            'left top 0px': type === TYPES_EDITABLE.TEXT
+                            [`rotateZ(${rotate}deg)`]: rotate !== 0
                         })
                     }}
                 >
