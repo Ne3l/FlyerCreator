@@ -182,6 +182,16 @@ class Galeria extends Component {
                 >
                     Texto
                 </span>
+
+                <span
+                    draggable
+                    onDragStart={ev => {
+                        ev.nativeEvent.dataTransfer.setData('type', TYPES_EDITABLE.CONTAINER);
+                    }}
+                    className="textDraggable"
+                >
+                    Container
+                </span>
             </div>
         );
     }

@@ -11,7 +11,8 @@ export const POSITIONS = {
 
 export const TYPES_EDITABLE = {
     TEXT: 'TEXT',
-    IMAGE: 'IMAGE'
+    IMAGE: 'IMAGE',
+    CONTAINER: 'CONTAINER'
 };
 
 export const ALIGN = {

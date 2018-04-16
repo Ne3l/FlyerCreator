@@ -84,8 +84,8 @@ class Page extends Component {
         switch (type) {
             case TYPES_EDITABLE.TEXT:
                 this.props.addItem({
+                    type,
                     editing: false,
-                    type: TYPES_EDITABLE.TEXT,
                     text: 'Lorem Ipsum',
                     top: e.clientY,
                     left: e.clientX,
@@ -103,9 +103,9 @@ class Page extends Component {
                 break;
             case TYPES_EDITABLE.IMAGE:
                 this.props.addItem({
+                    type,
                     editing: false,
                     cropping: false,
-                    type: TYPES_EDITABLE.IMAGE,
                     src,
                     name,
                     top: e.clientY,
@@ -121,6 +121,16 @@ class Page extends Component {
                     contrast: 100,
                     opacity: 100,
                     brightness: 100
+                });
+                break;
+            case TYPES_EDITABLE.CONTAINER:
+                this.props.addItem({
+                    type,
+                    editing: false,
+                    top: e.clientY,
+                    left: e.clientX,
+                    width: 300,
+                    height: 100
                 });
                 break;
             default:
