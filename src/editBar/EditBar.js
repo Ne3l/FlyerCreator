@@ -55,16 +55,33 @@ export const EditBarImg = ({
     );
 };
 
-export const EditBarContainer = ({ backgroundColor, onChange }) => {
+export const EditBarContainer = ({ backgroundColor, borderWidth, borderStyle, borderColor, onChange }) => {
     const change = props => onChange(props);
+    const changeSlider = name => ev => change({ [name]: parseInt(ev.target.value, 10) });
+
     return (
         <div className="EditBar">
-            <ColorInput
-                value={backgroundColor}
-                onChange={color => {
-                    change({ backgroundColor: color });
-                }}
-            />
+            <ColorInput value={backgroundColor} onChange={color => change({ backgroundColor: color })} />
+
+            <div className="containerFiltro">
+                Ancho borde: {borderWidth}
+                <input type="range" min={0} max={100} value={borderWidth} onChange={changeSlider('borderWidth')} />
+            </div>
+
+            <select onChange={e => change({ borderStyle: e.target.value })} value={borderStyle}>
+                <option value="solid">Solido </option>
+                <option value="dashed">Dashed</option>
+                <option value="double">Doble</option>
+                <option value="ridge">Ridge</option>
+                <option value="inset">Inset</option>
+                <option value="outset">outset</option>
+                <option value="groove">groove</option>
+                <option value="dotted">dotted</option>
+                <option value="none">none</option>
+                <option value="hidden">hidden</option>
+            </select>
+
+            <ColorInput value={borderColor} onChange={color => change({ borderColor: color })} />
         </div>
     );
 };
@@ -86,12 +103,7 @@ export const EditBarText = ({
 
     return (
         <div className="EditBar">
-            <select
-                onChange={e => {
-                    change({ fontFamily: e.target.value });
-                }}
-                value={fontFamily}
-            >
+            <select onChange={e => change({ fontFamily: e.target.value })} value={fontFamily}>
                 <option value={'Open Sans'}>Open Sans</option>
                 <option value={'sans-serif'}>Sans serif</option>
                 <option value={'monospace'}>Monospace</option>
@@ -108,12 +120,7 @@ export const EditBarText = ({
                     </option>
                 ))}
             </select>
-            <ColorInput
-                value={color}
-                onChange={color => {
-                    change({ color });
-                }}
-            />
+            <ColorInput value={color} onChange={color => change({ color })} />
             <button onClick={e => change({ bold: !bold })}> Bold</button>
             <button onClick={e => change({ italic: !italic })}> Italic</button>
             <select onChange={e => change({ align: e.target.value })} value={align}>

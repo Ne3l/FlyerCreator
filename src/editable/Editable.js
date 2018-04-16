@@ -228,9 +228,20 @@ class Editable extends Component {
     }
 
     renderContainer() {
-        const { backgroundColor, width, height } = this.props;
+        const { backgroundColor, width, borderColor, borderStyle, borderWidth, height, zoom } = this.props;
 
-        return <div style={{ backgroundColor, width, height }} />;
+        return (
+            <div
+                style={{
+                    backgroundColor,
+                    borderColor,
+                    borderStyle,
+                    borderWidth,
+                    width: width * zoom,
+                    height: height * zoom
+                }}
+            />
+        );
     }
 
     renderChildren() {
@@ -258,7 +269,7 @@ class Editable extends Component {
                         center: align === ALIGN.CENTER,
                         right: align === ALIGN.RIGHT
                     }),
-                    transform: `translateY(0em) scale(${zoom}`,
+                    transform: `translateY(0em) scale(${zoom})`,
                     transformOrigin: 'left top 0px'
                 }}
             >

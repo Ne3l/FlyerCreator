@@ -129,6 +129,9 @@ class Page extends Component {
                     top: e.clientY,
                     left: e.clientX,
                     backgroundColor: '#000',
+                    borderColor: '#333',
+                    borderStyle: 'solid',
+                    borderWidth: 1,
                     width: 300,
                     height: 100,
                     rotate: 0

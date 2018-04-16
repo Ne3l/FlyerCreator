@@ -70,7 +70,15 @@ class Editor extends Component {
         }
 
         if (editItem.type === TYPES_EDITABLE.CONTAINER) {
-            return <EditBarContainer backgroundColor={editItem.backgroundColor} onChange={this.props.changeItem} />;
+            return (
+                <EditBarContainer
+                    backgroundColor={editItem.backgroundColor}
+                    borderWidth={editItem.borderWidth}
+                    borderColor={editItem.borderColor}
+                    borderStyle={editItem.borderStyle}
+                    onChange={this.props.changeItem}
+                />
+            );
         }
     }
 
