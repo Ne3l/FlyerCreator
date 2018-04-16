@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Editor.css';
 import { TYPES_EDITABLE } from './Constantes';
-import { EditBarText, EditBarImg } from './editBar/EditBar';
+import { EditBarText, EditBarImg, EditBarContainer } from './editBar/EditBar';
 import Page from './page/Page';
 import ZoomController from './zoomController';
 
@@ -67,6 +67,10 @@ class Editor extends Component {
                     crop={e => this.props.toggleCrop({ id: editItem.id })}
                 />
             );
+        }
+
+        if (editItem.type === TYPES_EDITABLE.CONTAINER) {
+            return <EditBarContainer backgroundColor={editItem.backgroundColor} onChange={this.props.changeItem} />;
         }
     }
 

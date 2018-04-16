@@ -114,6 +114,39 @@ class Editable extends Component {
             zoom
         } = this.props;
 
+        if (type === TYPES_EDITABLE.CONTAINER) {
+            return (
+                <Rotable
+                    width={width}
+                    height={height}
+                    left={left}
+                    top={top}
+                    visible={!cropping}
+                    degrees={rotate}
+                    onChange={degrees => changeItem({ rotate: degrees })}
+                >
+                    <Resizable
+                        visible={!cropping}
+                        width={width}
+                        height={height}
+                        left={left}
+                        top={top}
+                        onChange={changeItem}
+                        TOP_LEFT
+                        TOP_CENTER
+                        TOP_RIGHT
+                        LEFT_CENTER
+                        RIGHT_CENTER
+                        BOTTOM_LEFT
+                        BOTTOM_CENTER
+                        BOTTOM_RIGHT
+                    >
+                        {this.renderContainer()}
+                    </Resizable>
+                </Rotable>
+            );
+        }
+
         if (type === TYPES_EDITABLE.IMAGE) {
             return (
                 <Rotable
@@ -194,10 +227,20 @@ class Editable extends Component {
         );
     }
 
-    renderChildren() {
-        const { color, fontFamily, fontSize, italic, bold, letterSpace, lineHeight, align, zoom } = this.props;
+    renderContainer() {
+        const { backgroundColor, width, height } = this.props;
 
-        if (this.props.type === TYPES_EDITABLE.IMAGE) {
+        return <div style={{ backgroundColor, width, height }} />;
+    }
+
+    renderChildren() {
+        const { color, fontFamily, fontSize, italic, bold, letterSpace, lineHeight, align, zoom, type } = this.props;
+
+        if (type === TYPES_EDITABLE.CONTAINER) {
+            return this.renderContainer();
+        }
+
+        if (type === TYPES_EDITABLE.IMAGE) {
             return this.renderImg();
         }
         return (

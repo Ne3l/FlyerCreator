@@ -55,6 +55,20 @@ export const EditBarImg = ({
     );
 };
 
+export const EditBarContainer = ({ backgroundColor, onChange }) => {
+    const change = props => onChange(props);
+    return (
+        <div className="EditBar">
+            <ColorInput
+                value={backgroundColor}
+                onChange={color => {
+                    change({ backgroundColor: color });
+                }}
+            />
+        </div>
+    );
+};
+
 export const EditBarText = ({
     color,
     bold,

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Editable from '../editable/Editable';
 import { TYPES_EDITABLE, ALIGN } from '../Constantes';
-import { EditBarText, EditBarImg } from '../editBar/EditBar';
 import './Page.css';
 
 // method extracted from https://stackoverflow.com/questions/279749/detecting-the-system-dpi-ppi-from-js-css/39795416#39795416
@@ -129,8 +128,10 @@ class Page extends Component {
                     editing: false,
                     top: e.clientY,
                     left: e.clientX,
+                    backgroundColor: '#000',
                     width: 300,
-                    height: 100
+                    height: 100,
+                    rotate: 0
                 });
                 break;
             default:
@@ -172,49 +173,6 @@ class Page extends Component {
                 {...item}
             />
         ));
-    }
-
-    renderEditBar() {
-        const editItem = this.props.items.find(e => e.editing);
-
-        if (!editItem) return <div className="EditBar" />;
-
-        if (editItem.type === TYPES_EDITABLE.TEXT) {
-            return (
-                <EditBarText
-                    fontFamily={editItem.fontFamily}
-                    fontSize={editItem.fontSize}
-                    color={editItem.color}
-                    italic={editItem.italic}
-                    bold={editItem.bold}
-                    align={editItem.align}
-                    lineHeight={editItem.lineHeight}
-                    letterSpace={editItem.letterSpace}
-                    onChange={this.props.changeItem}
-                    changeCapitalization={e => {
-                        const selection = window.getSelection().toString();
-                        this.props.changeItem({ text: editItem.text.split(selection).join(selection.toUpperCase()) });
-                    }}
-                />
-            );
-        }
-
-        if (editItem.type === TYPES_EDITABLE.IMAGE) {
-            return (
-                <EditBarImg
-                    sepia={editItem.sepia}
-                    gray={editItem.gray}
-                    saturation={editItem.saturation}
-                    contrast={editItem.contrast}
-                    opacity={editItem.opacity}
-                    brightness={editItem.brightness}
-                    rotateX={editItem.rotateX}
-                    rotateY={editItem.rotateY}
-                    onChange={this.props.changeItem}
-                    crop={e => this.props.toggleCrop({ id: editItem.id })}
-                />
-            );
-        }
     }
 
     render() {
