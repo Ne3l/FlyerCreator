@@ -82,9 +82,7 @@ export class Rotable extends Component {
                     <div
                         className="rotate"
                         onMouseDown={this.handleMouseDown}
-                        style={{
-                            transform: `rotate(${360 - degrees}deg)`
-                        }}
+                        style={{ transform: `rotate(${360 - degrees}deg)` }}
                     >
                         {Math.floor(degrees)}°
                     </div>
