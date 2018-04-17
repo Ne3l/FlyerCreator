@@ -63,3 +63,59 @@ export const SIZES = {
         }
     }
 };
+
+export const DEFAULTS_TYPE_OBJ = {
+    TEXT: {
+        type: TYPES_EDITABLE.TEXT,
+        editing: false,
+        text: 'Lorem Ipsum',
+        top: 0,
+        left: 0,
+        width: 150,
+        fontSize: 12,
+        fontFamily: 'Open Sans',
+        color: '#000',
+        rotate: 0,
+        bold: false,
+        italic: false,
+        align: ALIGN.LEFT,
+        lineHeight: 1.4,
+        letterSpace: 10,
+        zIndex: 1
+    },
+    IMAGE: {
+        type: TYPES_EDITABLE.IMAGE,
+        editing: false,
+        cropping: false,
+        src: null,
+        name: null,
+        top: 0,
+        left: 0,
+        width: 150,
+        height: 150,
+        rotate: 0,
+        rotateX: false,
+        rotateY: false,
+        sepia: 0,
+        gray: 0,
+        saturation: 100,
+        contrast: 100,
+        opacity: 100,
+        brightness: 100,
+        zIndex: 1
+    },
+    CONTAINER: {
+        type: TYPES_EDITABLE.CONTAINER,
+        editing: false,
+        top: 0,
+        left: 0,
+        backgroundColor: '#fff',
+        borderColor: '#333',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        width: 150,
+        height: 100,
+        rotate: 0,
+        zIndex: 1
+    }
+};
