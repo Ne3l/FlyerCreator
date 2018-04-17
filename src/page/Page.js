@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Editable from '../editable/Editable';
-import { TYPES_EDITABLE, ALIGN } from '../Constantes';
+import { TYPES_EDITABLE, ALIGN, SIZES } from '../Constantes';
 import './Page.css';
 
 // method extracted from https://stackoverflow.com/questions/279749/detecting-the-system-dpi-ppi-from-js-css/39795416#39795416
@@ -22,15 +22,6 @@ const getDPI = () => {
 };
 
 const DPI = getDPI();
-
-const SIZES = {
-    A4: {
-        96: {
-            width: 794 - 1,
-            height: 1123 - 1
-        }
-    }
-};
 
 const mapStateToProps = (state, props) => {
     return {

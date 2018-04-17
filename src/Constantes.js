@@ -54,3 +54,12 @@ export const TECLAS_ESPECIALES = {
     PAGE_UP: 33,
     SPACE_BAR: 32
 };
+
+export const SIZES = {
+    A4: {
+        96: {
+            width: 794 - 1,
+            height: 1123 - 1
+        }
+    }
+};

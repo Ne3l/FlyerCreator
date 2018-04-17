@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TYPES_EDITABLE } from './Constantes';
+import { TYPES_EDITABLE, SIZES } from './Constantes';
 import './Galeria.css';
 
 const mapStateToProps = (state, props) => {
@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         changeZoom(zoom) {
             dispatch({ type: 'CHANGE_ZOOM', zoom: zoom });
+        },
+        addItem(item) {
+            dispatch({ type: 'ADD_ITEM', item });
         }
     };
 };
@@ -127,18 +130,14 @@ class Galeria extends Component {
         return (
             <div
                 className="Galeria"
-                ref={container => {
-                    this.container = container;
-                }}
+                ref={container => (this.container = container)}
                 onDragLeave={this.handleDragLeave}
                 onDragOver={this.handleDragOver}
                 onDrop={this.handleDrop}
             >
                 <div className="btn-add-file">
                     <input
-                        ref={input => {
-                            this.fileInput = input;
-                        }}
+                        ref={input => (this.fileInput = input)}
                         className="inputFileHidden"
                         type="file"
                         accept="image/*"
@@ -166,6 +165,31 @@ class Galeria extends Component {
                                 ev.nativeEvent.dataTransfer.setData('type', TYPES_EDITABLE.IMAGE);
                                 ev.nativeEvent.dataTransfer.setData('src', e.src);
                                 ev.nativeEvent.dataTransfer.setData('name', e.name);
+                            }}
+                            onClick={ev => {
+                                const pageDimensions = SIZES.A4[96];
+
+                                this.props.addItem({
+                                    type: TYPES_EDITABLE.IMAGE,
+                                    editing: false,
+                                    cropping: false,
+                                    src: e.src,
+                                    name: e.name,
+                                    top: pageDimensions.height / 2 - ev.target.height / 2 + 106, // TODO get topStartPage and replace 106
+                                    left: pageDimensions.width / 2 - ev.target.width / 2 + 356, // TODO get leftStartPage and replace 356
+                                    width: ev.target.width,
+                                    height: ev.target.height,
+                                    rotate: 0,
+                                    rotateX: false,
+                                    rotateY: false,
+                                    sepia: 0,
+                                    gray: 0,
+                                    saturation: 100,
+                                    contrast: 100,
+                                    opacity: 100,
+                                    brightness: 100,
+                                    zIndex: 1
+                                });
                             }}
                             src={e.src}
                             alt="img"
