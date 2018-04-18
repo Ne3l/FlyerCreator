@@ -1,26 +1,30 @@
 {
-    "name": "promociones",
-    "version": "0.1.0",
-    "private": true,
-    "browserslist": [
-        "> 1% in ES",
-        "not IE > 0"
-    ],
-    "dependencies": {
-        "classnames": "^2.2.5",
-        "cropperjs": "^1.3.5",
-        "lodash": "^4.17.5",
-        "react": "^16.3.1",
-        "react-color": "^2.14.1",
-        "react-dom": "^16.3.1",
-        "react-redux": "^5.0.7",
-        "react-scripts": "1.1.4",
-        "redux": "^3.7.2"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
-    }
+  "name": "promociones",
+  "version": "0.1.0",
+  "private": true,
+  "browserslist": [
+    "> 1% in ES",
+    "not IE > 0"
+  ],
+  "homepage": "https://ne3l.github.io/FlyerCreator",
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "cropperjs": "^1.3.5",
+    "gh-pages": "^1.1.0",
+    "lodash": "^4.17.5",
+    "react": "^16.3.2",
+    "react-color": "^2.14.1",
+    "react-dom": "^16.3.2",
+    "react-redux": "^5.0.7",
+    "react-scripts": "1.1.4",
+    "redux": "^4.0.0"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
 }
